@@ -1,103 +1,101 @@
-let userScores = {
-    U: 0, Uzlah: 0, 
-    N: 0, H: 0, 
-    A: 0, R: 0, 
-    I: 0, T: 0
-};
-
-let currentQuestionIndex = 0;
-
-function startQuiz() {
-    document.getElementById('start-screen').classList.add('hidden');
-    document.getElementById('quiz-screen').classList.remove('hidden');
-    renderQuestion();
-}
-
-function renderQuestion() {
-    const q = questions[currentQuestionIndex];
-    const questionText = document.getElementById('question-text');
-    const optionsGroup = document.getElementById('options-group');
-    const progressText = document.getElementById('progress-text');
-    const progressBar = document.getElementById('quiz-progress');
-    const total = questions.length;
-    progressText.innerText = `问题 ${currentQuestionIndex + 1} / ${total}`;
-    progressBar.value = ((currentQuestionIndex + 1) / total) * 100;
-    questionText.innerText = q.text;
-    optionsGroup.innerHTML = '';
-    q.options.forEach(opt => {
-        const btn = document.createElement('button');
-        btn.className = 'option-btn';
-        btn.innerText = opt.text;
-        btn.onclick = () => handleSelect(opt.weights);
-        optionsGroup.appendChild(btn);
-    });
-    window.scrollTo(0, 0);
-}
-
-function handleSelect(weights) {
-    for (let dimension in weights) {
-        if (userScores.hasOwnProperty(dimension)) {
-            userScores[dimension] += weights[dimension];
-        }
-    }
-    if (currentQuestionIndex < questions.length - 1) {
-        currentQuestionIndex++;
-        renderQuestion();
-    } else {
-        showResult();
-    }
-}
-
-function showResult() {
-    document.getElementById('quiz-screen').classList.add('hidden');
-    document.getElementById('result-screen').classList.remove('hidden');
-    let typeCode = "";
-    typeCode += userScores.U >= userScores.Uzlah ? "U" : "I"; 
-    typeCode += userScores.N >= userScores.H ? "N" : "H";
-    typeCode += userScores.A >= userScores.R ? "A" : "R";
-    typeCode += userScores.I >= userScores.T ? "I" : "T";
-    
-
-
-
-    const result = archetypeMap[typeCode] || {
-        name: "信士 (Mu'min)",
-        desc: "在主道上不断求索的旅行者，具备平衡的特质。",
-        advice: "继续保持对知识的渴求与对主命的守持。"
-    };
-    document.getElementById('result-code').innerText = typeCode;
-    document.getElementById('result-name').innerText = result.name;
-    document.getElementById('result-desc').innerText = result.desc;
-    document.getElementById('result-advice').innerText = result.advice;
-    const typeImage = document.getElementById('type-image');
-    if (typeImage) {
-        typeImage.src = `${typeCode}.png`;
-        typeImage.alt = `Result: ${typeCode}`;
-    }
-}
-
 const archetypeMap = {
-    // SJ: 坚定的守护者
-    "UNAI": { name: "阿米尔 (Ameer)", desc: "社区的组织者与秩序的维护者。", advice: "利用你的组织天赋服务社区，但记得在决策中多听取仁慈（Rahma）的建议。" },
-    "UNRI": { name: "穆阿文 (Mu'awin)", desc: "热衷于互助的纽带，擅长款待（Ihsan）。", advice: "你的温暖团结了乌玛，注意不要在繁杂的事务中忽略了个人灵性的深度。" },
-    "INAI": { name: "穆哈菲兹 (Muhafiz)", desc: "传统与经文细节的坚定守护者。", advice: "你让经典得以精准流传，尝试在应用教法时结合更多当下的智慧（Hikmah）。" },
-    "INRI": { name: "穆安德姆 (Mu'addib)", desc: "默默奉献的教育者，重视礼仪（Adab）。", advice: "通过言传身教影响他人，你的耐心是社区最宝贵的财富。" },
+    "UNAI": { 
+        name: "阿米尔 (Ameer/秩序建构者)", 
+        desc: "你倾向于在复杂的社会协作中建立清晰的规则与秩序，是制度的坚实捍卫者。", 
+        history: "代表人物：欧麦尔·本·赫塔卜。他不仅是领袖，更是卓越的法理学家与行政制度奠基人。",
+        advice: "利用你的组织天赋服务社会，但记得在决策中多听取‘仁慈’维度的声音，避免制度陷入僵化。" 
+    },
+    "UNRI": { 
+        name: "穆阿文 (Mu'awin/社群粘合剂)", 
+        desc: "你重视人际间的温情与互助，是多元文化社会中天然的调解员，擅长通过‘美德’消除偏见。", 
+        history: "代表人物：安萨尔人。历史上以博大胸怀接纳外来者、建立互助共荣关系的典范。",
+        advice: "你的温暖团结了众人，但要注意不要在繁杂的社交事务中忽略了个人思维的深度。" 
+    },
+    "INAI": { 
+        name: "穆哈菲兹 (Muhafiz/文化守门人)", 
+        desc: "你对传统、经文和历史细节有着近乎执着的坚守，在这个快速流变的时代，你是一块压舱石。", 
+        history: "代表人物：布哈里。以极其严苛、理性的逻辑筛选历史信息，确保了文明根基的纯粹。",
+        advice: "你让经典得以精准流传，尝试在应用传统智慧时，结合更多现代社会的‘Hikmah’（智慧）。" 
+    },
+    "INRI": { 
+        name: "穆安德姆 (Mu'addib/礼仪引导者)", 
+        desc: "你重视内在教养与外在礼仪的合一，认为改变世界应该从改善个体的修养（Adab）开始。", 
+        history: "代表人物：伊玛目·纳瓦威。以温和而坚定的学术人格，通过道德教化影响了后续数百年的人格构建。",
+        advice: "通过言传身教影响他人，你的耐心与体面是现代社会浮躁心态的一剂良药。" 
+    },
 
-    // NT: 理性的灯塔
-    "UNAT": { name: "穆夫提 (Mufti)", desc: "战略性的法理判定者，逻辑严密。", advice: "你能为复杂问题提供清晰方向，请确保法理判决中带有对弱势者的怜悯。" },
-    "INAT": { name: "穆智台希德 (Mujtahid)", desc: "独立的思考者，追求深层规律与逻辑。", advice: "你为乌玛寻找未来路径，记得将高深的理论转化为普通人能理解的语言。" },
-    "UNAH": { name: "穆加迪勒 (Mujadil)", desc: "睿智的辩论者，通过思辨明晰真理。", advice: "擅长破除迷信与偏见，注意在辩论中保持温和与对他人的尊重。" },
-    "INAH": { name: "哈基姆 (Hakim)", desc: "追求万物本质逻辑的哲人。", advice: "你在孤独中发现真理，请适时分享你的洞见以照亮社区。" },
+    "UNAT": { 
+        name: "穆夫提 (Mufti/战略分析家)", 
+        desc: "你拥有极强的逻辑推导能力，能够为纷乱的现代争端提供具有可操作性的法理/伦理方案。", 
+        history: "代表人物：阿布·哈尼法。大阿布，以高度的逻辑灵活性（Qiyas）处理复杂社会问题的鼻祖。",
+        advice: "你能为复杂问题提供清晰方向，请确保你的逻辑判决中带有对人类苦难的深刻共情。" 
+    },
+    "INAT": { 
+        name: "穆智台希德 (Mujtahid/开拓性的思考者)", 
+        desc: "你不满足于现成的答案，善于透过现象看本质，在古老的智慧中挖掘解决现代危机的逻辑。", 
+        history: "代表人物：伊本·赫勒敦。社会学之父，第一位试图用自然规律解释文明兴衰的思考者。",
+        advice: "你为文明寻找未来路径，记得将高深的理论转化为普通人也能听懂的‘人间烟火’。" 
+    },
+    "UNAH": { 
+        name: "穆加迪勒 (Mujadil/公共知识分子)", 
+        desc: "你热衷于思辨与对话，擅长破除刻板印象与认知偏见，在互联网的舆论场中通过辩论明晰真相。", 
+        history: "代表人物：伊本·路什德（阿威罗伊）。将亚里士多德逻辑与信仰结合，深刻影响了后来的欧洲启蒙运动。",
+        advice: "擅长破除迷信，注意在辩论中保持温和，避免让真理的讨论演变为纯粹的胜负之争。" 
+    },
+    "INAH": { 
+        name: "哈基姆 (Hakim/自然哲人)", 
+        desc: "你认为科学是祂造物的一部分。你追求万事万物的底层逻辑，在实验室与图书馆中修行。", 
+        history: "代表人物：海什木。光学之父，不仅是科学家，更提出了‘通过观察自然来认识真理’的修行观。",
+        advice: "你在孤独中发现规律，请适时分享你的洞见，让这些‘造物的奥秘’照亮更多人的迷途。" 
+    },
 
-    // NF: 灵性的引导
-    "URAT": { name: "穆尔希德 (Murshid)", desc: "极具感召力的导师，引导灵性提升。", advice: "你激发了他人的信仰热情，请注意保持谦逊以对抗内心的私欲（Nafs）。" },
-    "IRAT": { name: "阿林 (Alim)", desc: "博学深沉，将知识与觉悟合一。", advice: "你的存在就是一种宣教，继续在隐遁与社会责任之间保持平衡。" },
-    "URAH": { name: "达伊 (Da'i)", desc: "热情的传道员，传播喜讯的使者。", advice: "你让信仰变得生动有趣，请确保热情背后有扎实的知识基础（Ilm）支撑。" },
-    "IRAH": { name: "扎希德 (Zahid)", desc: "追求纯净、超然世外的苦修者。", advice: "你的清高是社区的镜子，记得在退隐时也不要忘记对乌玛的关怀。" },
+    "URAT": { 
+        name: "穆尔希德 (Murshid/心灵导师)", 
+        desc: "你具有极强的感召力，不靠强权而是靠灵性的光辉引导他人，是现代人的‘心理按摩师’。", 
+        history: "代表人物：鲁米。他的诗歌跨越了种族与宗教，用‘爱’这一终极信仰治愈了无数灵魂。",
+        advice: "你激发了他人的信仰热情，请注意时刻保持谦逊，以对抗权力带给自我的幻觉。" 
+    },
+    "IRAT": { 
+        name: "阿林 (Alim/知行合一的学者)", 
+        desc: "你不仅博学，更追求知识背后的‘觉悟’。在现代社会，你是那种深藏不露的智者。", 
+        history: "代表人物：阿布·哈米德·加扎利。他在巅峰时期退隐，寻求理性和灵性的最终调和。",
+        advice: "你的存在本身就是一种宣教，继续在学术责任与个人修行之间保持优雅的平衡。" 
+    },
+    "URAH": { 
+        name: "达伊 (Da'i/文明交流使者)", 
+        desc: "你擅长跨文化对话，能够把古老的东方智慧翻译成现代语言，是文明之间沟通的桥梁。", 
+        history: "代表人物：伊本·白图泰。通过旅行与见闻，将不同地域、不同种族的人类连接在一起。",
+        advice: "你让信仰变得生动，请确保你的热情背后，有扎实的历史与法理知识作为支撑。" 
+    },
+    "IRAH": { 
+        name: "扎希德 (Zahid/简约主义践行者)", 
+        desc: "在这个物欲横流的时代，你追求极致的纯净与超然，以低欲望、高质量的精神生活对抗平庸。", 
+        history: "代表人物：拉比娅·阿德维亚。她以纯粹的‘无私之爱’诠释了什么是真正的精神自由。",
+        advice: "你的清高是社会的镜子，记得在退隐修行的同时，也要保持对尘世弱势者的关怀。" 
+    },
 
-    // SP: 行动的先锋
-    "UNAK": { name: "穆贾希德 (Mujahid)", desc: "勇敢果断，在困难面前冲锋在前。", advice: "你的勇气激励人心，行动前请多向有经验的长者咨询以确保方向正确。" },
-    "URAK": { name: "哈提卜 (Khatib)", desc: "感染力极强的演讲者，活跃气氛的大师。", advice: "你用语言播种希望，请确保你的言行一致，做真理的践行者。" },
-    "INAK": { name: "萨利赫 (Salih)", desc: "寡言敏行，擅长解决实际问题的实干家。", advice: "你通过双手事主，你的工作就是你的礼拜，请继续保持这份纯洁的意图。" },
-    "IRAK": { name: "阿迪卜 (Adib)", desc: "展现美感与礼仪的文人。", advice: "你让生活变得泰伊卜（Tayyib），用你的艺术天赋去美化社区的环境与心灵。" }
+    "UNAK": { 
+        name: "穆贾希德 (Mujahid/正义的捍卫者)", 
+        desc: "你勇敢、果断，无法忍受任何形式的不公。在面对霸权或偏见时，你总是冲在最前线。", 
+        history: "代表人物：萨拉丁。他的敌人也尊敬他，因为他在战斗中依然恪守着最严苛的信义与慷慨。",
+        advice: "你的勇气激励人心，行动前请多向有经验的长者咨询，确保行动不偏离‘正义’的本初。" 
+    },
+    "URAK": { 
+        name: "哈提卜 (Khatib/思想传播者)", 
+        desc: "你是言语的天才，能通过激荡人心的演讲或文字，唤醒群体意识，推动社会的改良。", 
+        history: "代表人物：马尔科姆·X。他通过言辞的力量挑战制度性偏见，展现了信仰重塑人格的伟力。",
+        advice: "你用语言播种希望，请确保言行一致，让你的生命本身成为你所宣导真理的注脚。" 
+    },
+    "INAK": { 
+        name: "萨利赫 (Salih/沉默的实干家)", 
+        desc: "你认为‘行动胜过万语’。你是那个在水灾后第一时间修堤坝、在网络混乱中修补代码的人。", 
+        history: "代表人物：伊本·阿比·萨尔。早期文明中众多的工匠与建设者，通过具体的劳动实现对造物主的赞美。",
+        advice: "你的双手即是你的祭坛，请继续保持这份纯洁的意图，不为名利只为‘泰伊卜’（美好）。" 
+    },
+    "IRAK": { 
+        name: "阿迪卜 (Adib/审美先行者)", 
+        desc: "你通过美感、艺术和文学来表达信仰。你认为如果一个文明无法生产‘美’，它就失去了灵魂。", 
+        history: "代表人物：萨迪。他的《玫瑰园》与《果园》用最绝妙的修辞，将枯燥的道德变成了美的盛宴。",
+        advice: "你让生活变得优雅。请继续用你的艺术天赋去消解仇恨，美化这块日益荒芜的现代精神领地。" 
+    }
 };
