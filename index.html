@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muslim BTI | 探索天性 (Fitra)</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css">
+    <style>
+        :root {
+            --deep-green: #096409; 
+            --light-green: #F1F8F1; 
+            --primary: var(--deep-green);
+            --primary-hover: #123C12;
+            --accent-gold: #D4AF37;
+        }
+
+        body {
+            background-color: var(--deep-green) !important; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        .main-card {
+            max-width: 650px;
+            width: 100%;
+            padding: 2.5rem;
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .main-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 10px;
+            background: linear-gradient(90deg, var(--deep-green), var(--accent-gold), var(--deep-green));
+        }
+
+        .moon-symbol {
+            font-size: 2.5rem;
+            display: block;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .arabic-header {
+            font-size: 1.4rem;
+            color: var(--deep-green);
+            text-align: center;
+            margin-bottom: 1.2rem;
+            opacity: 0.9;
+        }
+
+        h1 {
+            color: var(--deep-green) !important;
+            text-align: center;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .option-btn {
+            background-color: #fdfdfd !important;
+            color: #333 !important;
+            border: 1.5px solid #e0e0e0 !important;
+            margin-bottom: 1rem;
+            text-align: left;
+            width: 100%;
+            font-weight: 500;
+            transition: all 0.25s ease;
+            line-height: 1.5;
+            padding: 1rem 1.4rem;
+            border-radius: 12px;
+        }
+
+        .option-btn:hover {
+            border-color: var(--deep-green) !important;
+            background-color: var(--light-green) !important;
+            color: var(--deep-green) !important;
+            transform: translateX(5px);
+        }
+
+        .start-btn {
+            background-color: var(--deep-green) !important;
+            border: none !important;
+            color: white !important;
+            padding: 1.2rem;
+            font-size: 1.1rem;
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(9, 100, 9, 0.3);
+        }
+
+        progress { height: 10px; border-radius: 5px; margin-bottom: 0.5rem; }
+        progress::-webkit-progress-value { background-color: var(--deep-green) !important; }
+
+        /* 维度进度条容器 */
+        .dimension-box { margin-bottom: 1rem; }
+        .dimension-label { 
+            display: flex; 
+            justify-content: space-between; 
+            font-size: 0.8rem; 
+            margin-bottom: 0.2rem;
+            color: #666;
+        }
+
+        .hidden { display: none !important; }
+
+        #type-image {
+            max-width: 180px; 
+            height: auto;
+            margin: 1.5rem auto;
+            display: block;
+            border-radius: 50%;
+            border: 4px solid var(--light-green);
+        }
+
+        .result-box {
+            background-color: var(--light-green);
+            padding: 1.8rem;
+            border-radius: 20px;
+            color: #2c3e50;
+            margin-top: 1.5rem;
+            border: 1px solid rgba(9, 100, 9, 0.1);
+        }
+
+        .history-box {
+            background-color: #fff;
+            border: 1px dashed var(--accent-gold);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .advice-box {
+            border-left: 4px solid var(--accent-gold);
+            padding-left: 1rem;
+            margin-top: 1rem;
+            font-style: italic;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        section { animation: fadeIn 0.5s ease-out; }
+    </style>
+</head>
+<body>
+
+    <main class="main-card">
+        <section id="start-screen">
+            <span class="moon-symbol">🌙</span>
+            <div class="arabic-header">بسم الله الرحمن الرحيم</div>
+            <h1>Muslim BTI</h1>
+            <div class="subtitle">探索你的天性 (Fitra) | مؤشر الشخصية</div>
+            <p style="color: #444; text-align: center; line-height: 1.8;">
+                科学探索是造物的一部分，理解世界即是修行。<br>
+                本测评将结合学术思辨与灵性逻辑，助你发现自己在文明光谱中的方位。
+            </p>
+            <button class="start-btn" onclick="startQuiz()">开启探索 / ابدأ الرحلة</button>
+        </section>
+
+        <section id="quiz-screen" class="hidden">
+            <progress id="quiz-progress" value="0" max="100"></progress>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <small id="progress-text" style="color: var(--deep-green); font-weight: bold; letter-spacing: 1px;">加载中...</small>
+                <span style="font-size: 1.2rem;">✨</span>
+            </div>
+            <h4 id="question-text" style="color: #1a1a1a !important; line-height: 1.4; margin-bottom: 2rem;">
+                正在加载场景...
+            </h4>
+            <div id="options-group"></div>
+        </section>
+
+        <section id="result-screen" class="hidden">
+            <div style="text-align: center;">
+                <span class="moon-symbol">🌿</span>
+                <img id="type-image" src="" alt="人格类型图示">
+                <small style="letter-spacing: 3px; color: #888; text-transform: uppercase; font-size: 0.75rem;">您的文明特质代码</small>
+                <h1 id="result-code" style="font-size: 3.5rem; margin: 0.2rem 0; color: var(--accent-gold) !important;">TYPE</h1>
+                <h3 id="result-name" style="color: var(--deep-green); font-weight: 800; font-size: 1.8rem; margin-top: 0;">称号加载中...</h3>
+            </div>
+            
+            <div class="result-box">
+                <div style="margin-bottom: 1.5rem;">
+                    <div class="dimension-box">
+                        <div class="dimension-label"><span>出世 (I) / 入世 (U)</span><span id="score-ui">50% U</span></div>
+                        <progress id="bar-ui" value="50" max="100"></progress>
+                    </div>
+                    <div class="dimension-box">
+                        <div class="dimension-label"><span>哲学 (H) / 文本 (N)</span><span id="score-nh">50% N</span></div>
+                        <progress id="bar-nh" value="50" max="100"></progress>
+                    </div>
+                    <div class="dimension-box">
+                        <div class="dimension-label"><span>仁慈 (R) / 公义 (A)</span><span id="score-ar">50% A</span></div>
+                        <progress id="bar-ar" value="50" max="100"></progress>
+                    </div>
+                    <div class="dimension-box">
+                        <div class="dimension-label"><span>变通 (T) / 传统 (I)</span><span id="score-it">50% I</span></div>
+                        <progress id="bar-it" value="50" max="100"></progress>
+                    </div>
+                </div>
+
+                <strong>核心特质 (Essence)：</strong>
+                <p id="result-desc" style="margin-top: 0.5rem; margin-bottom: 1rem; line-height: 1.7;"></p>
+                
+                <div class="history-box">
+                    <strong>历史原型 (Historical Archetype)：</strong>
+                    <p id="result-history" style="margin: 0.5rem 0 0 0; color: #555;"></p>
+                </div>
+
+                <div style="margin-top: 1.5rem;">
+                    <strong>修行建议 (Tazkiyah)：</strong>
+                    <div id="result-advice" class="advice-box"></div>
+                </div>
+            </div>
+
+            <button class="outline" onclick="location.reload()" style="margin-top: 2rem; width: 100%; border: 1.5px solid var(--deep-green) !important; color: var(--deep-green) !important; border-radius: 12px;">重新开启测评</button>
+        </section>
+    </main>
+
+    <script src="questions.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
